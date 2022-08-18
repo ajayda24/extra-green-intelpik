@@ -1,0 +1,35 @@
+.App-header {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.center-stepper {
+  display: flex;
+  justify-content: center;
+}
+
+.Form-heading {
+  display: flex;
+  justify-content: center;
+  text-decoration: underline;
+  font-size: calc(12px + 2vmin);
+}
+
+.radio {
+  padding: 10px;
+}
+
+.radio-subheader {
+  padding-left: 30px;
+  color: rgb(121, 121, 121);
+}
+
+.radio-button {
+  padding-top: 120px;
+}
+
+.togglebutton {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
