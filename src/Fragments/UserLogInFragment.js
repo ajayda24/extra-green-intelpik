@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 const UserLogInFragment = () => <SignInForm />
 
 const SignInFormBase = (props) => {
+  const [otpIsError, setOtpIsError] = useState(false)
   const classes = useStyles()
   const [error, setError] = useState('')
   const [phoneNum, setPhoneNum] = React.useState(0)
@@ -77,6 +78,7 @@ const SignInFormBase = (props) => {
 
   const DialogTitle = (props) => {
     const { children, classes, onClose, ...other } = props
+
     return (
       <MuiDialogTitle disableTypography {...other}>
         <Typography variant='h6'>{children}</Typography>
@@ -159,6 +161,7 @@ const SignInFormBase = (props) => {
       })
       .catch(function (error) {
         console.log(error)
+        setOtpIsError(true)
       })
   }
   const setUpRecaptcha = () => {
@@ -178,7 +181,7 @@ const SignInFormBase = (props) => {
   const onSignInSubmit = (e) => {
     e.preventDefault()
     setUpRecaptcha()
-    let phoneNumber = '+91' + phoneNum
+    let phoneNumber = '+971' + phoneNum
     console.log(phoneNumber)
     setDetails({ ...details, phoneNumber: phoneNumber })
     let appVerifier = window.recaptchaVerifier
@@ -209,6 +212,7 @@ const SignInFormBase = (props) => {
         aria-describedby='alert-dialog-description'
       >
         <DialogTitle id='alert-dialog-title'>{'Enter OTP'}</DialogTitle>
+        {otpIsError && <center>Invalid OTP</center>}
         <DialogContent>
           <TextField
             variant='outlined'

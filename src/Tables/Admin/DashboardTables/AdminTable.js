@@ -1,4 +1,4 @@
-import React, { Component, forwardRef } from "react";
+import React, { Component, forwardRef } from 'react'
 import {
   Backdrop,
   CircularProgress,
@@ -8,43 +8,43 @@ import {
   Slide,
   Divider,
   TextField,
-} from "@material-ui/core";
-import MaterialTable from "material-table";
+} from '@material-ui/core'
+import MaterialTable from 'material-table'
 
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
-import { connect } from "react-redux";
-import { loadOrder } from "../../../Store/Action/Admin/Dashboard/OrderAction";
+import AddBox from '@material-ui/icons/AddBox'
+import ArrowDownward from '@material-ui/icons/ArrowDownward'
+import Check from '@material-ui/icons/Check'
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
+import Clear from '@material-ui/icons/Clear'
+import DeleteOutline from '@material-ui/icons/DeleteOutline'
+import Edit from '@material-ui/icons/Edit'
+import FilterList from '@material-ui/icons/FilterList'
+import FirstPage from '@material-ui/icons/FirstPage'
+import LastPage from '@material-ui/icons/LastPage'
+import Remove from '@material-ui/icons/Remove'
+import SaveAlt from '@material-ui/icons/SaveAlt'
+import Search from '@material-ui/icons/Search'
+import ViewColumn from '@material-ui/icons/ViewColumn'
+import { connect } from 'react-redux'
+import { loadOrder } from '../../../Store/Action/Admin/Dashboard/OrderAction'
 
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
-import { mainContext } from "../../../Contexts/MainContext";
-import AutocompleteWrapper1 from "../../../Component.js/FormComponents/Autocomplete1";
-import { firestore } from "../../../Firebase";
-import { loadOrderDetails } from "../../../Store/Action/Admin/Dashboard/OrderDetailsAction";
-import DriverAutocompleteWrapper from "../../../Component.js/FormComponents/DriverAutocomplete";
-import AutocompleteWrapper2 from "../../../Component.js/FormComponents/Autocomplete2";
-import AutocompleteWrapper3 from "../../../Component.js/FormComponents/Autocomplete3";
-import AutocompleteWrapper4 from "../../../Component.js/FormComponents/Autocomplete4";
-import AutocompleteWrapper5 from "../../../Component.js/FormComponents/Autocomplete5";
-import LocationDialog1 from "../../../Component.js/Dialog/LocationDialog1";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import Dialog from '@material-ui/core/Dialog'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import CloseIcon from '@material-ui/icons/Close'
+import { mainContext } from '../../../Contexts/MainContext'
+import AutocompleteWrapper1 from '../../../Component.js/FormComponents/Autocomplete1'
+import { firestore } from '../../../Firebase'
+import { loadOrderDetails } from '../../../Store/Action/Admin/Dashboard/OrderDetailsAction'
+import DriverAutocompleteWrapper from '../../../Component.js/FormComponents/DriverAutocomplete'
+import AutocompleteWrapper2 from '../../../Component.js/FormComponents/Autocomplete2'
+import AutocompleteWrapper3 from '../../../Component.js/FormComponents/Autocomplete3'
+import AutocompleteWrapper4 from '../../../Component.js/FormComponents/Autocomplete4'
+import AutocompleteWrapper5 from '../../../Component.js/FormComponents/Autocomplete5'
+import LocationDialog1 from '../../../Component.js/Dialog/LocationDialog1'
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -67,101 +67,100 @@ const tableIcons = {
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-};
+}
 
 class AdminTable extends Component {
   constructor(props) {
-    super(props);
-
+    super(props)
     this.state = {
       columns: [
-        { title: "RefID", field: "uid" },
-        { title: "Customer Name", field: "name" },
-        { title: "Duration", field: "Duration" },
-        { title: "Material", field: "Material" },
-        { title: "Number of Professionals", field: "NumberofProfessionals" },
-        { title: "city", field: "city" },
-        { title: "Frequency", field: "frequency" },
-        { title: "Amount", field: "Amount" },
+        { title: 'RefID', field: 'uid' },
+        { title: 'Customer Name', field: 'name' },
+        { title: 'Duration', field: 'Duration' },
+        { title: 'Material', field: 'Material' },
+        { title: 'Number of Professionals', field: 'NumberofProfessionals' },
+        { title: 'city', field: 'city' },
+        { title: 'Frequency', field: 'frequency' },
+        { title: 'Amount', field: 'Amount' },
       ],
       loading: true,
       open: false,
-      rejectMsg: "",
+      rejectMsg: '',
       dialogData: [],
       AssignTask: [],
-    };
+    }
   }
   handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+    this.setState({ open: true })
+  }
 
   handleClose = () => {
-    this.setState({ open: false });
-  };
+    this.setState({ open: false })
+  }
 
   Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+    return <Slide direction='up' ref={ref} {...props} />
+  })
 
   componentDidMount() {
     this.props.loadOrder(
       () => {
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       },
       () => {
         //error
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       }
-    );
+    )
     this.props.loadOrderDetails(
       () => {
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       },
       () => {
         //error
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       }
-    );
+    )
   }
   render() {
     const { setStep, staff1, staff2, staff3, staff4, staff5, Driver } =
-      this.context;
-    const { dialogData } = this.state;
-    const { orderDetails } = this.props;
-
+      this.context
+    const { dialogData } = this.state
+    const { orderDetails } = this.props
+    console.log(orderDetails)
     return (
       <div>
         <Backdrop
-          style={{ zIndex: 500, color: "#ffffff" }}
+          style={{ zIndex: 500, color: '#ffffff' }}
           open={this.state.loading}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
         <Dialog
           fullScreen
           open={this.state.open}
           onClose={this.handleClose}
           TransitionComponent={this.Transition}
-          style={{ backgroundColor: "#f7f7f7", width: "100vw" }}
+          style={{ backgroundColor: '#f7f7f7', width: '100vw' }}
         >
           <AppBar
             style={{
-              position: "relative",
-              width: "100vw",
-              backgroundColor: "#3C4B64",
+              position: 'relative',
+              width: '100vw',
+              backgroundColor: '#3C4B64',
             }}
           >
             <Toolbar>
               <Grid container>
-                <Grid item xs={4} style={{ textAlign: "left" }}>
+                <Grid item xs={4} style={{ textAlign: 'left' }}>
                   <IconButton
-                    edge="start"
-                    color="inherit"
+                    edge='start'
+                    color='inherit'
                     onClick={() => {
-                      this.handleClose();
-                      setStep(1);
+                      this.handleClose()
+                      setStep(1)
                     }}
-                    aria-label="close"
+                    aria-label='close'
                   >
                     <CloseIcon />
                   </IconButton>
@@ -169,31 +168,31 @@ class AdminTable extends Component {
                 <Grid
                   item
                   xs={4}
-                  style={{ textAlign: "center", paddingTop: 10 }}
+                  style={{ textAlign: 'center', paddingTop: 10 }}
                 >
-                  <Typography variant="h6">Order Details</Typography>
+                  <Typography variant='h6'>Order Details</Typography>
                 </Grid>
-                <Grid item xs={4} style={{ textAlign: "right" }}></Grid>
+                <Grid item xs={4} style={{ textAlign: 'right' }}></Grid>
               </Grid>
             </Toolbar>
           </AppBar>
-          {this.state.dialogData.status === "pending" ? (
+          {this.state.dialogData.status === 'pending' ? (
             <Grid
               container
               style={{
-                width: "100%",
-                height: "100%",
-                marginTop: "50px",
-                marginBottom: "50px",
+                width: '100%',
+                height: '100%',
+                marginTop: '50px',
+                marginBottom: '50px',
               }}
             >
               <Grid
                 item
                 xs={12}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <h3>Do you want to accept this Job</h3>
@@ -202,53 +201,53 @@ class AdminTable extends Component {
                 item
                 xs={6}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   style={{
-                    paddingLeft: "50px",
-                    paddingRight: "50px",
-                    paddingBottom: "10px",
-                    paddingTop: "10px",
+                    paddingLeft: '50px',
+                    paddingRight: '50px',
+                    paddingBottom: '10px',
+                    paddingTop: '10px',
                   }}
                   onClick={(data) => {
                     data = {
                       ...this.state.dialogData,
-                      status: "active",
-                    };
+                      status: 'active',
+                    }
                     firestore
-                      .collection("order")
+                      .collection('order')
                       .doc(data.uid)
                       .update(data)
                       .then(() => {
-                        this.handleClose();
+                        this.handleClose()
                         this.props.loadOrder(
                           () => {
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           },
                           () => {
                             //error
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           }
-                        );
+                        )
                         this.props.loadOrderDetails(
                           () => {
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           },
                           () => {
                             //error
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           }
-                        );
+                        )
                       })
                       .catch(() => {
-                        console.log("error");
-                      });
+                        console.log('error')
+                      })
                   }}
                 >
                   Accept
@@ -258,53 +257,53 @@ class AdminTable extends Component {
                 item
                 xs={6}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   style={{
-                    paddingLeft: "50px",
-                    paddingRight: "50px",
-                    paddingBottom: "10px",
-                    paddingTop: "10px",
+                    paddingLeft: '50px',
+                    paddingRight: '50px',
+                    paddingBottom: '10px',
+                    paddingTop: '10px',
                   }}
                   onClick={(data) => {
                     data = {
                       ...this.state.dialogData,
-                      status: "rejected",
-                    };
+                      status: 'rejected',
+                    }
                     firestore
-                      .collection("order")
+                      .collection('order')
                       .doc(data.uid)
                       .update(data)
                       .then(() => {
-                        this.handleClose();
+                        this.handleClose()
                         this.props.loadOrder(
                           () => {
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           },
                           () => {
                             //error
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           }
-                        );
+                        )
                         this.props.loadOrderDetails(
                           () => {
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           },
                           () => {
                             //error
-                            this.setState({ loading: false });
+                            this.setState({ loading: false })
                           }
-                        );
+                        )
                       })
                       .catch(() => {
-                        console.log("error");
-                      });
+                        console.log('error')
+                      })
                   }}
                 >
                   Reject
@@ -316,18 +315,18 @@ class AdminTable extends Component {
             container
             style={{
               flexGrow: 1,
-              width: "80vw",
-              hight: "100%",
-              marginLeft: "50px",
+              width: '80vw',
+              hight: '100%',
+              marginLeft: '50px',
             }}
             spacing={2}
-            justify="center"
+            justify='center'
           >
             <Grid item xs={12}>
-              <Grid container justify="center">
+              <Grid container justify='center'>
                 <Grid item xs={12}>
-                  {this.state.dialogData.status === "pending" ? null : this
-                      .state.dialogData.status === "active" ? (
+                  {this.state.dialogData.status === 'pending' ? null : this
+                      .state.dialogData.status === 'active' ? (
                     <div>
                       <Grid container>
                         <Grid item xs={12}></Grid>
@@ -340,7 +339,7 @@ class AdminTable extends Component {
                               item
                               xs={12}
                               style={{
-                                marginTop: "20px",
+                                marginTop: '20px',
                               }}
                             >
                               {this.state.dialogData.NumberofProfessionals ===
@@ -436,7 +435,7 @@ class AdminTable extends Component {
                           item
                           xs={12}
                           style={{
-                            marginTop: "20px",
+                            marginTop: '20px',
                           }}
                         >
                           <DriverAutocompleteWrapper
@@ -450,23 +449,23 @@ class AdminTable extends Component {
                         <Grid item xs={10}>
                           <div
                             style={{
-                              width: "100%",
-                              marginTop: "20px",
-                              marginBottom: "20px",
+                              width: '100%',
+                              marginTop: '20px',
+                              marginBottom: '20px',
                             }}
                           >
                             <Grid container>
                               <Grid item xs={6}></Grid>
-                              {this.state.dialogData.status !== "pending" ? (
+                              {this.state.dialogData.status !== 'pending' ? (
                                 <Grid item xs={6}>
                                   <Button
-                                    variant="contained"
-                                    color="primary"
+                                    variant='contained'
+                                    color='primary'
                                     style={{
-                                      paddingLeft: "50px",
-                                      paddingRight: "50px",
-                                      paddingBottom: "10px",
-                                      paddingTop: "10px",
+                                      paddingLeft: '50px',
+                                      paddingRight: '50px',
+                                      paddingBottom: '10px',
+                                      paddingTop: '10px',
                                     }}
                                     onClick={(data) => {
                                       data = {
@@ -478,35 +477,35 @@ class AdminTable extends Component {
                                         staff4: staff4.username,
                                         staff5: staff5.username,
                                         Driver: Driver.username,
-                                      };
+                                      }
                                       firestore
-                                        .collection("order")
+                                        .collection('order')
                                         .doc(data.uid)
                                         .update(data)
                                         .then(() => {
-                                          this.handleClose();
+                                          this.handleClose()
                                           this.props.loadOrder(
                                             () => {
-                                              this.setState({ loading: false });
+                                              this.setState({ loading: false })
                                             },
                                             () => {
                                               //error
-                                              this.setState({ loading: false });
+                                              this.setState({ loading: false })
                                             }
-                                          );
+                                          )
                                           this.props.loadOrderDetails(
                                             () => {
-                                              this.setState({ loading: false });
+                                              this.setState({ loading: false })
                                             },
                                             () => {
                                               //error
-                                              this.setState({ loading: false });
+                                              this.setState({ loading: false })
                                             }
-                                          );
+                                          )
                                         })
                                         .catch(() => {
-                                          console.log("error");
-                                        });
+                                          console.log('error')
+                                        })
                                     }}
                                   >
                                     Save Changes
@@ -515,13 +514,13 @@ class AdminTable extends Component {
                               ) : (
                                 <Grid item xs={6}>
                                   <Button
-                                    variant="contained"
-                                    color="primary"
+                                    variant='contained'
+                                    color='primary'
                                     style={{
-                                      paddingLeft: "50px",
-                                      paddingRight: "50px",
-                                      paddingBottom: "10px",
-                                      paddingTop: "10px",
+                                      paddingLeft: '50px',
+                                      paddingRight: '50px',
+                                      paddingBottom: '10px',
+                                      paddingTop: '10px',
                                     }}
                                     disabled={true}
                                   >
@@ -534,11 +533,11 @@ class AdminTable extends Component {
                         </Grid>
                       </Grid>
                     </div>
-                  ) : this.state.dialogData.status === "rejected" ? (
+                  ) : this.state.dialogData.status === 'rejected' ? (
                     <div
                       style={{
-                        paddingTop: "40px",
-                        paddingBottom: "40px",
+                        paddingTop: '40px',
+                        paddingBottom: '40px',
                       }}
                     >
                       <Grid container>
@@ -546,11 +545,11 @@ class AdminTable extends Component {
                           item
                           xs={12}
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            paddingTop: "10px",
-                            paddingBottom: "10px",
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingTop: '10px',
+                            paddingBottom: '10px',
                           }}
                         >
                           <h3>Enter a message for the client</h3>
@@ -559,16 +558,16 @@ class AdminTable extends Component {
                       <Grid container>
                         <Grid item xs={12} style={{ marginLeft: 100 }}>
                           <TextField
-                            id="outlined-multiline-static"
-                            label="Rejection Message"
+                            id='outlined-multiline-static'
+                            label='Rejection Message'
                             multiline
                             fullWidth
                             rows={4}
                             value={this.state.rejectMsg}
                             onChange={(event) => {
-                              this.setState({ rejectMsg: event.target.value });
+                              this.setState({ rejectMsg: event.target.value })
                             }}
-                            variant="outlined"
+                            variant='outlined'
                           />
                         </Grid>
                       </Grid>
@@ -576,57 +575,57 @@ class AdminTable extends Component {
                         <Grid item xs={10}>
                           <div
                             style={{
-                              width: "100%",
-                              marginTop: "20px",
-                              marginBottom: "20px",
+                              width: '100%',
+                              marginTop: '20px',
+                              marginBottom: '20px',
                             }}
                           >
                             <Grid container>
                               <Grid item xs={6}></Grid>
                               <Grid item xs={6}>
                                 <Button
-                                  variant="contained"
-                                  color="primary"
+                                  variant='contained'
+                                  color='primary'
                                   style={{
-                                    paddingLeft: "50px",
-                                    paddingRight: "50px",
-                                    paddingBottom: "10px",
-                                    paddingTop: "10px",
+                                    paddingLeft: '50px',
+                                    paddingRight: '50px',
+                                    paddingBottom: '10px',
+                                    paddingTop: '10px',
                                   }}
                                   onClick={(data) => {
                                     data = {
                                       ...this.state.dialogData,
                                       rejectMsg: this.state.rejectMsg,
                                       rejected: true,
-                                    };
+                                    }
                                     firestore
-                                      .collection("order")
+                                      .collection('order')
                                       .doc(data.uid)
                                       .update(data)
                                       .then(() => {
-                                        this.handleClose();
+                                        this.handleClose()
                                         this.props.loadOrder(
                                           () => {
-                                            this.setState({ loading: false });
+                                            this.setState({ loading: false })
                                           },
                                           () => {
                                             //error
-                                            this.setState({ loading: false });
+                                            this.setState({ loading: false })
                                           }
-                                        );
+                                        )
                                         this.props.loadOrderDetails(
                                           () => {
-                                            this.setState({ loading: false });
+                                            this.setState({ loading: false })
                                           },
                                           () => {
                                             //error
-                                            this.setState({ loading: false });
+                                            this.setState({ loading: false })
                                           }
-                                        );
+                                        )
                                       })
                                       .catch(() => {
-                                        console.log("error");
-                                      });
+                                        console.log('error')
+                                      })
                                   }}
                                 >
                                   Save Changes
@@ -644,9 +643,9 @@ class AdminTable extends Component {
             <Grid item xs={12}>
               <h3
                 style={{
-                  color: "#333D47",
-                  paddingLeft: "50px",
-                  paddingTop: "30px",
+                  color: '#333D47',
+                  paddingLeft: '50px',
+                  paddingTop: '30px',
                 }}
               >
                 Payment Details
@@ -658,11 +657,11 @@ class AdminTable extends Component {
                   item
                   xs={3}
                   style={{
-                    textAlign: "left",
+                    textAlign: 'left',
                     marginBottom: -5,
                     paddingRight: 50,
                     paddingLeft: 50,
-                    color: "#8CA0B3",
+                    color: '#8CA0B3',
                   }}
                 >
                   <h4>Amount</h4>
@@ -674,7 +673,7 @@ class AdminTable extends Component {
                     marginBottom: -5,
                     paddingRight: 50,
                     paddingLeft: 50,
-                    color: "#333D47",
+                    color: '#333D47',
                   }}
                 >
                   <h4>{dialogData.Amount}</h4>
@@ -687,11 +686,11 @@ class AdminTable extends Component {
                   item
                   xs={3}
                   style={{
-                    textAlign: "left",
+                    textAlign: 'left',
                     marginBottom: -5,
                     paddingRight: 50,
                     paddingLeft: 50,
-                    color: "#8CA0B3",
+                    color: '#8CA0B3',
                   }}
                 >
                   <h4>Payment Options:</h4>
@@ -703,7 +702,7 @@ class AdminTable extends Component {
                     marginBottom: -5,
                     paddingRight: 50,
                     paddingLeft: 50,
-                    color: "#333D47",
+                    color: '#333D47',
                   }}
                 >
                   <h4>{dialogData.paymentOptions}</h4>
@@ -715,9 +714,9 @@ class AdminTable extends Component {
                 <Grid item xs={12}>
                   <h3
                     style={{
-                      color: "#333D47",
-                      paddingLeft: "50px",
-                      paddingTop: "30px",
+                      color: '#333D47',
+                      paddingLeft: '50px',
+                      paddingTop: '30px',
                     }}
                   >
                     Order Summary
@@ -729,11 +728,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Ref ID:</h4>
@@ -745,7 +744,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.uid}</h4>
@@ -758,11 +757,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Name:</h4>
@@ -774,7 +773,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.name}</h4>
@@ -787,11 +786,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Phone Number:</h4>
@@ -803,7 +802,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.phoneNumber}</h4>
@@ -816,11 +815,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Email:</h4>
@@ -832,7 +831,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.email}</h4>
@@ -848,7 +847,7 @@ class AdminTable extends Component {
                     paddingLeft: 50,
                   }}
                 >
-                  <h3 style={{ fontWeight: "600", color: "#333D47" }}>
+                  <h3 style={{ fontWeight: '600', color: '#333D47' }}>
                     SERVICE DETAILS
                   </h3>
                 </div>
@@ -858,11 +857,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Cleaning Type</h4>
@@ -874,7 +873,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.CleaningType}</h4>
@@ -887,11 +886,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Frequency</h4>
@@ -903,7 +902,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.frequency}</h4>
@@ -916,11 +915,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Duration</h4>
@@ -932,7 +931,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.Duration}</h4>
@@ -945,11 +944,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Number of Professionals</h4>
@@ -961,7 +960,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.NumberofProfessionals}</h4>
@@ -974,11 +973,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Material</h4>
@@ -990,7 +989,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.Material}</h4>
@@ -1003,11 +1002,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Payment Options</h4>
@@ -1019,7 +1018,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.paymentOptions}</h4>
@@ -1032,11 +1031,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Instructions (Optional)</h4>
@@ -1048,7 +1047,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.instructions}</h4>
@@ -1062,11 +1061,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>DATE</h4>
@@ -1078,7 +1077,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.date}</h4>
@@ -1089,11 +1088,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>TIME</h4>
@@ -1106,10 +1105,10 @@ class AdminTable extends Component {
                         marginBottom: 5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
-                      {dialogData.date === "2014-08-18 21:11:54" ? (
+                      {dialogData.date === '2014-08-18 21:11:54' ? (
                         <h4>Select Time</h4>
                       ) : (
                         <h4>{dialogData.time}</h4>
@@ -1124,11 +1123,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>ADDRESS</h4>
@@ -1140,15 +1139,15 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.address}</h4>
                       <a
                         href={`http://maps.google.com/maps?&z=15&mrt=loc&t=m&q=${dialogData.latitude}+${dialogData.longitude}`}
-                        target="_blank"
+                        target='_blank'
                       >
-                        Click here to see location{" "}
+                        Click here to see location{' '}
                       </a>
                     </Grid>
                   </Grid>
@@ -1159,11 +1158,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4> Area/Street No. (Optional)</h4>
@@ -1175,7 +1174,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.address1}</h4>
@@ -1188,11 +1187,11 @@ class AdminTable extends Component {
                       item
                       xs={3}
                       style={{
-                        textAlign: "left",
+                        textAlign: 'left',
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#8CA0B3",
+                        color: '#8CA0B3',
                       }}
                     >
                       <h4>Villa/Flat No. (Optional)</h4>
@@ -1204,7 +1203,7 @@ class AdminTable extends Component {
                         marginBottom: -5,
                         paddingRight: 50,
                         paddingLeft: 50,
-                        color: "#333D47",
+                        color: '#333D47',
                       }}
                     >
                       <h4>{dialogData.address2}</h4>
@@ -1217,7 +1216,7 @@ class AdminTable extends Component {
         </Dialog>
         <MaterialTable
           icons={tableIcons}
-          title=""
+          title=''
           columns={this.state.columns}
           data={this.props.order}
           options={{
@@ -1227,34 +1226,34 @@ class AdminTable extends Component {
             {
               icon: () => <AssignmentIndIcon />,
 
-              tooltip: "Assign Job",
+              tooltip: 'Assign Job',
               onClick: (event, rowData) => {
-                this.handleClickOpen();
-                this.setState({ dialogData: { ...rowData } });
+                this.handleClickOpen()
+                this.setState({ dialogData: { ...rowData } })
               },
             },
           ]}
         />
       </div>
-    );
+    )
   }
 }
 
-AdminTable.contextType = mainContext;
+AdminTable.contextType = mainContext
 
 const mapStateToProps = (state) => {
   return {
     order: state.order,
     orderDetails: state.orderDetails,
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     loadOrder: (onSuccess, onError) => dispatch(loadOrder(onSuccess, onError)),
     loadOrderDetails: (onSuccess, onError) =>
       dispatch(loadOrderDetails(onSuccess, onError)),
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminTable);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminTable)

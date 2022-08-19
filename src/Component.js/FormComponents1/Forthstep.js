@@ -78,9 +78,9 @@ const Forthstep = () => {
     setPaymentOptions(event.target.value)
     setUserData({ ...userData, paymentOptions: event.target.value })
   }
-  const bill1 = 30
-  const bill2 = 30
-  const bill3 = 30
+  const bill1 = 30 + 30 * (5 / 100)
+  const bill2 = 30 + 30 * (5 / 100)
+  const bill3 = 30 + 30 * (5 / 100)
   const material = 5
 
   useEffect(() => {
@@ -417,7 +417,7 @@ const Forthstep = () => {
                       textDecoration: 'bold',
                     }}
                   >
-                    <h3 style={{ fontWeight: '500', color: '#8CA0B3' }}>Tax</h3>
+                    <h3 style={{ fontWeight: '500', color: '#8CA0B3' }}>VAT</h3>
                   </Grid>
                   <Grid item xs={3}></Grid>
                   <Grid
@@ -431,7 +431,7 @@ const Forthstep = () => {
                       textDecoration: 'bold',
                     }}
                   >
-                    <h3 style={{ fontWeight: '500', color: '#333D47' }}>0%</h3>
+                    <h3 style={{ fontWeight: '500', color: '#333D47' }}>5%</h3>
                   </Grid>
                   <Grid
                     item

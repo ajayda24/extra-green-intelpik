@@ -1,22 +1,22 @@
-import React, { useContext } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
-import { mainContext } from "../../Contexts/MainContext";
-import firebase from "firebase/app";
-import { auth, db } from "../../Firebase";
+import React, { useContext, useState } from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
+import { mainContext } from '../../Contexts/MainContext'
+import firebase from 'firebase/app'
+import { auth, db } from '../../Firebase'
 import {
   Container,
   CssBaseline,
   DialogContent,
   TextField,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import * as ROLES from "../../UsersComponents/constants/roles";
-import RegistrationDialog2 from "./RegistrationDialog2";
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import * as ROLES from '../../UsersComponents/constants/roles'
+import RegistrationDialog2 from './RegistrationDialog2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,31 +24,33 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
 export default function OtpDialog() {
+  const [otpIsError, setOtpIsError] = useState(false)
+
   const {
     handleOptClose,
     otpPopup,
@@ -57,29 +59,29 @@ export default function OtpDialog() {
     details,
     setDetails,
     setUid,
-  } = React.useContext(mainContext);
-  const classes = useStyles();
-  const [phoneNum, setPhoneNum] = React.useState(0);
-  const [otp, setOtp] = React.useState(0);
+  } = React.useContext(mainContext)
+  const classes = useStyles()
+  const [phoneNum, setPhoneNum] = React.useState(0)
+  const [otp, setOtp] = React.useState(0)
   const onChangeHandler1 = (event) => {
-    const { value } = event.target;
-    setPhoneNum(value);
-  };
-  const [open, setOpen] = React.useState(false);
+    const { value } = event.target
+    setPhoneNum(value)
+  }
+  const [open, setOpen] = React.useState(false)
 
   const DialogTitle = (props) => {
-    const { children, classes, onClose, ...other } = props;
+    const { children, classes, onClose, ...other } = props
     return (
       <MuiDialogTitle disableTypography {...other}>
-        <Typography variant="h6">{children}</Typography>
+        <Typography variant='h6'>{children}</Typography>
         {onClose ? (
           <IconButton
-            aria-label="close"
+            aria-label='close'
             style={{
-              position: "absolute",
-              right: "10px",
-              top: "10px",
-              color: "#000",
+              position: 'absolute',
+              right: '10px',
+              top: '10px',
+              color: '#000',
             }}
             onClick={handleOptClose}
           >
@@ -87,54 +89,54 @@ export default function OtpDialog() {
           </IconButton>
         ) : null}
       </MuiDialogTitle>
-    );
-  };
+    )
+  }
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   const onChangeHandler2 = (event) => {
-    const { value } = event.target;
-    setOtp(value);
-  };
+    const { value } = event.target
+    setOtp(value)
+  }
 
   const onSubmitOtp = (e) => {
-    e.preventDefault();
-    let otpInput = otp;
-    let optConfirm = window.confirmationResult;
+    e.preventDefault()
+    let otpInput = otp
+    let optConfirm = window.confirmationResult
     // console.log(codee);
     optConfirm
       .confirm(otpInput)
       .then(() => {
-        var userId = firebase.auth().currentUser.uid;
-        setUid(userId);
-        const dbRef = firebase.database().ref();
+        var userId = firebase.auth().currentUser.uid
+        setUid(userId)
+        const dbRef = firebase.database().ref()
         dbRef
-          .child("users")
+          .child('users')
           .child(userId)
           .get()
           .then((snapshot) => {
             if (snapshot.exists()) {
-              if (snapshot.val().username !== "") {
-                setStep(4);
+              if (snapshot.val().username !== '') {
+                setStep(4)
               } else {
-                setSignInForm(true);
+                setSignInForm(true)
               }
             } else {
-              const isUser = true;
-              const roles = {};
-              const username = "";
-              const fullname = "";
-              const latitude = "";
-              const longitude = "";
+              const isUser = true
+              const roles = {}
+              const username = ''
+              const fullname = ''
+              const latitude = ''
+              const longitude = ''
 
-              const auth1 = ROLES.USER;
+              const auth1 = ROLES.USER
 
               if (isUser) {
-                roles[ROLES.USER] = ROLES.USER;
+                roles[ROLES.USER] = ROLES.USER
               }
               db.ref(`users/${userId}`).set({
                 roles,
@@ -143,118 +145,120 @@ export default function OtpDialog() {
                 fullname,
                 latitude,
                 longitude,
-              });
-              setSignInForm(true);
+              })
+              setSignInForm(true)
             }
           })
           .catch((error) => {
-            console.error(error);
-          });
-        console.log(userId);
+            console.error(error)
+          })
+        console.log(userId)
       })
       .then(function (result) {
         // User signed in successfully.
         // console.log("Result" + result.verificationID);
-        handleClose();
+        handleClose()
       })
       .catch(function (error) {
-        console.log(error);
-      });
-  };
+        console.log(error)
+        setOtpIsError(true)
+      })
+  }
   const setUpRecaptcha = () => {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
+      'recaptcha-container',
       {
-        size: "invisible",
+        size: 'invisible',
         callback: function (response) {
-          console.log("Captcha Resolved");
-          onSignInSubmit();
+          console.log('Captcha Resolved')
+          onSignInSubmit()
         },
-        defaultCountry: "UAE",
+        defaultCountry: 'UAE',
       }
-    );
-  };
+    )
+  }
 
   const onSignInSubmit = (e) => {
-    e.preventDefault();
-    setUpRecaptcha();
-    let phoneNumber = "+91" + phoneNum;
-    setDetails({ ...details, phoneNumber: phoneNumber });
-    let appVerifier = window.recaptchaVerifier;
+    e.preventDefault()
+    setUpRecaptcha()
+    let phoneNumber = '+971' + phoneNum
+    setDetails({ ...details, phoneNumber: phoneNumber })
+    let appVerifier = window.recaptchaVerifier
     auth
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then(function (confirmationResult) {
-        window.confirmationResult = confirmationResult;
+        window.confirmationResult = confirmationResult
         // console.log(confirmationResult);
 
-        console.log("OTP is sent");
-        handleClickOpen();
-        appVerifier.clear();
+        console.log('OTP is sent')
+        handleClickOpen()
+        appVerifier.clear()
       })
       .catch(function (error) {
-        console.log(error);
-      });
-  };
+        console.log(error)
+      })
+  }
 
   return (
     <div>
       <RegistrationDialog2 />
       <Dialog
         onClose={handleOptClose}
-        aria-labelledby="customized-dialog-title"
+        aria-labelledby='customized-dialog-title'
         open={otpPopup}
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleOptClose}>
+        <DialogTitle id='customized-dialog-title' onClose={handleOptClose}>
           Verification
         </DialogTitle>
         <DialogContent dividers>
-          <Container component="main" maxWidth="xs">
+          <Container component='main' maxWidth='xs'>
             <Dialog
               open={open}
               onClose={handleOptClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
             >
-              <DialogTitle id="alert-dialog-title">{"Enter OTP"}</DialogTitle>
+              <DialogTitle id='alert-dialog-title'>{'Enter OTP'}</DialogTitle>
               <DialogContent>
                 <TextField
-                  variant="outlined"
-                  margin="normal"
+                  variant='outlined'
+                  margin='normal'
                   required
                   fullWidth
-                  id="otp"
+                  id='otp'
                   onChange={onChangeHandler2}
-                  label="Enter Otp"
+                  label='Enter Otp'
                 />
                 <Button
-                  type="submit"
+                  type='submit'
                   fullWidth
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   onClick={onSubmitOtp}
                 >
                   Next
                 </Button>
+                {otpIsError && 'Invalid OTP'}
               </DialogContent>
             </Dialog>
             <CssBaseline />
             <div className={classes.paper}>
               <form className={classes.form} noValidate>
                 <TextField
-                  variant="outlined"
-                  margin="normal"
+                  variant='outlined'
+                  margin='normal'
                   required
                   fullWidth
                   onChange={onChangeHandler1}
-                  label="Enter Phone Number"
+                  label='Enter Phone Number'
                 />
-                <div id="recaptcha-container"></div>
+                <div id='recaptcha-container'></div>
 
                 <Button
-                  type="submit"
+                  type='submit'
                   fullWidth
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   className={classes.submit}
                   onClick={onSignInSubmit}
                 >
@@ -266,5 +270,5 @@ export default function OtpDialog() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserMobileLogin = (props) => {
+  const [otpIsError, setOtpIsError] = useState(false)
   const classes = useStyles()
   const [phoneNum, setPhoneNum] = React.useState(0)
   const [otp, setOtp] = React.useState(0)
@@ -90,6 +91,7 @@ const UserMobileLogin = (props) => {
       .catch(function (error) {
         console.log(error)
         alert('Incorrect OTP')
+        setOtpIsError(true)
       })
   }
   const setUpRecaptcha = () => {
@@ -101,7 +103,7 @@ const UserMobileLogin = (props) => {
           console.log('Captcha Resolved')
           onSignInSubmit()
         },
-        defaultCountry: 'IN',
+        defaultCountry: 'UAE',
       }
     )
   }
@@ -155,6 +157,7 @@ const UserMobileLogin = (props) => {
           >
             Sign In
           </Button>
+          {otpIsError && <center>Invalid OTP</center>}
         </DialogContent>
       </Dialog>
       <CssBaseline />

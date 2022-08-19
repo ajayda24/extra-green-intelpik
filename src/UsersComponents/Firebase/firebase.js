@@ -43,6 +43,7 @@ class Firebase {
               uid: authUser.uid,
               ...dbUser,
             }
+            console.log(authUser)
             next(authUser)
           })
       } else {

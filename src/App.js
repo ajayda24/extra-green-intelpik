@@ -47,15 +47,14 @@ const App = () => {
           <Route
             path='/Home'
             component={() => {
-              window.location.href = 'https://extragreenweb.wixsite.com/my-site'
+              window.location.href = 'http://extragreen.ae'
               return null
             }}
           />
           <Route
             path='/contact-us'
             component={() => {
-              window.location.href =
-                'https://extragreenweb.wixsite.com/my-site/contact-3'
+              window.location.href = 'http://extragreen.ae/contact-3'
               return null
             }}
           />
@@ -63,8 +62,7 @@ const App = () => {
           <Route
             path='/about'
             component={() => {
-              window.location.href =
-                'https://extragreenweb.wixsite.com/my-site/about-3'
+              window.location.href = 'http://extragreen.ae/about-3'
               return null
             }}
           />
